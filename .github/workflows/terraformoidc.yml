@@ -19,14 +19,13 @@ jobs:
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4.0.2
+      # Set up AWS credentials
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE }}
-          role-session-name: oidcrole1
-          aws-region: ${{ env.AWS_REGION }}
-      - name: Print Assumed Role
-        run: aws sts get-caller-identity
+          aws_access_key_id: ${{ secrets.ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
       - name: Terraform format
         id: fmt
         run: terraform fmt
