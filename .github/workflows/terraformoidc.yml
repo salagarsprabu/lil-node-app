@@ -1,0 +1,42 @@
+name: Terraform AWS OIDC GITHUB
+on:
+  push:
+    branches: [ "main" ]
+env:
+  AWS_REGION : "us-east-1"   
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  OIDC:
+    name: 'OIDC'
+    runs-on: ubuntu-latest
+    environment: oidc
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: oidcrole1
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Print Assumed Role
+        run: aws sts get-caller-identity
+      - name: Terraform format
+        id: fmt
+        run: make terraform-fmt
+      - name: Terraform init
+        id: init
+        run: make terraform-init
+      - name: Terraform Validate
+        id: validate
+        run: make terraform-validate
+      - name: Terraform Plan
+        id: plan
+        run: make terraform-plan
+  
