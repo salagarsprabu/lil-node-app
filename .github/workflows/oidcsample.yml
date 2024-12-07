@@ -22,7 +22,7 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::313184506150:role/oidcrole1
+          role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: oidcrole1
           aws-region: ${{ env.AWS_REGION }}
       - name: Print Assumed Role
