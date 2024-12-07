@@ -19,21 +19,19 @@ data "tls_certificate" "this" {
   url = "https://token.actions.githubusercontent.com/.well-known/openid-configuration"
 }
 
-/* resource "aws_iam_openid_connect_provider" "github_oidc" {
+resource "aws_iam_openid_connect_provider" "github_oidc" {
   url             = "https://token.actions.githubusercontent.com" # URL of the OIDC provider, which is specific to GitHub Actions
   client_id_list  = ["sts.amazonaws.com"] # lists the client IDs that are allowed to authenticate and integrating with AWS Security Token Service.
   thumbprint_list = [data.tls_certificate.this.certificates[0].sha1_fingerprint] # thumbprints used to verify the SSL certificate of the OIDC provider
-} */
+}
 
 
 data "aws_caller_identity" "current" {}
 
-## should be created beforehand
-
-data "aws_iam_openid_connect_provider" "github_actions_oidc" {
+/* data "aws_iam_openid_connect_provider" "github_actions_oidc" {
   url = "https://token.actions.githubusercontent.com"
 }
-
+*/
 resource "aws_iam_role" "github_actions_role" {
   name = "GitHubActionsOIDCRole"
 
