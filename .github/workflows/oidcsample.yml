@@ -1,0 +1,31 @@
+name: AWS OIDC GITHUB
+on:
+  push:
+    branches: [ "main" ]
+env:
+  AWS_REGION : "us-east-1"   
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  OIDC:
+    name: 'OIDC'
+    runs-on: ubuntu-latest
+    environment: oidc
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::313184506150:role/oidcrole1
+          role-session-name: oidcrole1
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Print Assumed Role
+        run: aws sts get-caller-identity
+      - name: Print s3 buckets
+        run: aws s3 ls
