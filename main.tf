@@ -15,10 +15,14 @@ provider "aws" {
   #   secret_key = var.aws_secret_key
 }
 
+data "tls_certificate" "this" {
+  url = "https://token.actions.githubusercontent.com/.well-known/openid-configuration"
+}
+
 resource "aws_iam_openid_connect_provider" "github_oidc" {
   url             = "https://token.actions.githubusercontent.com" # URL of the OIDC provider, which is specific to GitHub Actions
   client_id_list  = ["sts.amazonaws.com"] # lists the client IDs that are allowed to authenticate and integrating with AWS Security Token Service.
-  # thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1"] # thumbprints used to verify the SSL certificate of the OIDC provider
+  thumbprint_list = [data.tls_certificate.this.certificates[0].sha1_fingerprint] # thumbprints used to verify the SSL certificate of the OIDC provider
 }
 
 
