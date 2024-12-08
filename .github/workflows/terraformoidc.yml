@@ -4,6 +4,7 @@ on:
     branches: [ "main" ]
 env:
   AWS_REGION : "us-east-1"   
+  WORK_DIR: ./Terraform  # Set your working directory globally
 permissions:
       id-token: write
       contents: read
@@ -30,6 +31,8 @@ jobs:
       - name: Terraform format
         id: fmt
         run: terraform fmt
+        working-directory: ${{ env.WORK_DIR}}
+        
       - name: Terraform init
         id: init
         run: terraform init
