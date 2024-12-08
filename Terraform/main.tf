@@ -2,36 +2,29 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.6" # which means any version equal & above
+      version = ">= 5.6"
     }
   }
   required_version = ">= 0.13"
 }
 
 provider "aws" {
-  region  = var.region
-  # profile = "default" #AWS Credentials Profile (profile = "default") configured on local
-  #   access_key = var.aws_access_key
-  #   secret_key = var.aws_secret_key
+  region = var.region
 }
 
+# Fetch the OIDC certificate for GitHub Actions
 data "tls_certificate" "this" {
   url = "https://token.actions.githubusercontent.com/.well-known/openid-configuration"
 }
 
+# Create OIDC Provider for GitHub Actions in AWS
 resource "aws_iam_openid_connect_provider" "github_oidc" {
-  url             = "https://token.actions.githubusercontent.com" # URL of the OIDC provider, which is specific to GitHub Actions
-  client_id_list  = ["sts.amazonaws.com"] # lists the client IDs that are allowed to authenticate and integrating with AWS Security Token Service.
-  thumbprint_list = [data.tls_certificate.this.certificates[0].sha1_fingerprint] # thumbprints used to verify the SSL certificate of the OIDC provider
+  url             = "https://token.actions.githubusercontent.com"
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.this.certificates[0].sha1_fingerprint]
 }
 
-
-data "aws_caller_identity" "current" {}
-
-/* data "aws_iam_openid_connect_provider" "github_actions_oidc" {
-  url = "https://token.actions.githubusercontent.com"
-}
-*/
+# Create IAM Role for GitHub Actions to assume
 resource "aws_iam_role" "github_actions_role" {
   name = "GitHubActionsOIDCRole"
 
@@ -49,7 +42,6 @@ resource "aws_iam_role" "github_actions_role" {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
           },
           StringLike = {
-            # Restrict to specific repository and branch
             "token.actions.githubusercontent.com:sub" : "repo:salagarsprabu/lil-node-app:ref:refs/heads/main"
           }
         }
@@ -58,12 +50,13 @@ resource "aws_iam_role" "github_actions_role" {
   })
 }
 
-# Attach policies to the role
+# Attach S3 Full Access policy to the role
 resource "aws_iam_role_policy_attachment" "github_actions_policy" {
   role       = aws_iam_role.github_actions_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
+# Output the ARN of the GitHub Actions role
 output "github_actions_role_arn" {
   value = aws_iam_role.github_actions_role.arn
 }
