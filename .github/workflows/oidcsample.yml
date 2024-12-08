@@ -23,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
-          role-session-name: GitHubActionsOIDCRole
+          role-session-name: GitHubActionsSession
           aws-region: ${{ env.AWS_REGION }}
       - name: Print Assumed Role
         run: aws sts get-caller-identity
