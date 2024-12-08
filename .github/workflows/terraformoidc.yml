@@ -36,14 +36,23 @@ jobs:
       - name: Terraform init
         id: init
         run: terraform init
+        working-directory: ${{ env.WORK_DIR}}
+        
       - name: Terraform Validate
         id: validate
         run: terraform validate
+        working-directory: ${{ env.WORK_DIR}}
+        
       - name: Terraform Plan
         id: plan
         run: terraform plan
+        working-directory: ${{ env.WORK_DIR}}
+        
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
+        working-directory: ${{ env.WORK_DIR}}
+        
       - name: Terraform Output
         run: terraform output
+        working-directory: ${{ env.WORK_DIR}}
