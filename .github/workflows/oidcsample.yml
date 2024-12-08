@@ -23,9 +23,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
-          role-session-name: ghrole2
+          ## role-session-name: ghrole2
           aws-region: ${{ env.AWS_REGION }}
-      - name: Print Assumed Role
-        run: aws sts get-caller-identity
+     ## - name: Print Assumed Role
+     ##  run: aws sts get-caller-identity   
       - name: Print s3 buckets
         run: aws s3 ls
