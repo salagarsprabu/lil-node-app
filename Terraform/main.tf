@@ -53,7 +53,8 @@ resource "aws_iam_role" "github_actions_role" {
           },
           StringLike = {
             # Restrict to specific repository and branch
-            "token.actions.githubusercontent.com:sub" : "repo:salagarsprabu/lil-node-app:ref:refs/heads/main"
+            #"token.actions.githubusercontent.com:sub" : "repo:salagarsprabu/lil-node-app:ref:refs/heads/main"
+             "token.actions.githubusercontent.com:sub" : "repo:salagarsprabu/lil-node-app:*"
           }
         }
       }
