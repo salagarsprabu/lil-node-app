@@ -1,4 +1,4 @@
-name: Terraform AWS OIDC GITHUB
+name: Terraform AWS OIDC GITHUB Demo
 on:
   push:
     branches: [ "main" ]
