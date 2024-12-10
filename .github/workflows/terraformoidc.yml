@@ -56,8 +56,9 @@ jobs:
             const outcomeFmt = `${{ steps.fmt.outcome }}`;
             const outcomeInit = `${{ steps.init.outcome }}`;
             const outcomeValidate = `${{ steps.validate.outcome }}`;
+            const outcomePlan = `${{ steps.plan.outcome }}`;
             const validateOutput = `${{ steps.validate.outputs.stdout }}`;
-            const planOutput = `${{ steps.plan.outputs.plan_output }}`;
+            ## const planOutput = `${{ steps.plan.outputs.plan_output }}`;
             
             const output = `#### Terraform Format and Style 🖌 ${outcomeFmt}`;
             console.log(output);
@@ -92,7 +93,7 @@ jobs:
             </details>
             `;
             console.log(planDetailsMarkup);
-            Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
 
         
       - name: Terraform Apply
