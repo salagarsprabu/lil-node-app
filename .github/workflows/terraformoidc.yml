@@ -93,7 +93,7 @@ jobs:
             `;
             console.log(detailsPlanMarkup);
             
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            const message = `*Pushed by: @${process.env.GITHUB_ACTOR}, Action: \`${process.env.GITHUB_EVENT_NAME}\`*`;
             
       - name: Terraform Apply
         id: apply
