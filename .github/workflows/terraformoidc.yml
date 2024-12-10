@@ -53,7 +53,7 @@ jobs:
         run: |
           terraform validate > validate_output.txt
           ## echo "::set-output name=stdout::$(cat validate_output.txt)"
-          echo "stdout=$(cat validate_output.txt)" >> $GITHUB_ENV
+          echo "stdout=$(cat validate_output.txt)"
         working-directory: ${{ env.WORK_DIR}}  
 
       - name: Terraform Plan
