@@ -44,10 +44,11 @@ jobs:
         working-directory: ${{ env.WORK_DIR}}
 
       - uses: actions/github-script@v6
-        with:   
+        with:
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-       
+            const outcome = `${{ steps.fmt.outcome }}`;
+            const output = `#### Terraform Format and Style 🖌\`${outcome}\``;
+            console.log(output);
         
       - name: Terraform Plan
         id: plan
