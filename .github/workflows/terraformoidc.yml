@@ -48,18 +48,29 @@ jobs:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           script: |
-            const outcome = `${{ steps.fmt.outcome }}`;
-            const output = `#### Terraform Format and Style 🖌\`${outcome}\``;
+            const outcomeFmt = `${{ steps.fmt.outcome }}`;
+            const outcomeInit = `${{ steps.init.outcome }}`;
+            const outcomeValidate = `${{ steps.validate.outcome }}`;
+            const validateOutput = `${{ steps.validate.outputs.stdout }}`;
+            
+            const output = `#### Terraform Format and Style 🖌 ${outcomeFmt}`;
             console.log(output);
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            <details><summary>Validation Output</summary>
-
-            \`\`\`\n
-            ${{ steps.validate.outputs.stdout }}
-            \`\`\`
-
+      
+            const initOutput = `#### Terraform Initialization ⚙️ ${outcomeInit}`;
+            console.log(initOutput);
+      
+            const validateStatus = `#### Terraform Validation 🤖 ${outcomeValidate}`;
+            console.log(validateStatus);
+      
+            const detailsMarkup = `
+            <details>
+              <summary>Validation Output</summary>
+              \`\`\`
+              ${validateOutput}
+              \`\`\`
             </details>
+            `;
+            console.log(detailsMarkup);
         
       - name: Terraform Plan
         id: plan
