@@ -43,6 +43,11 @@ jobs:
         run: terraform validate
         working-directory: ${{ env.WORK_DIR}}
 
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan
+        working-directory: ${{ env.WORK_DIR}}
+
       - uses: actions/github-script@v6
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
@@ -52,6 +57,7 @@ jobs:
             const outcomeInit = `${{ steps.init.outcome }}`;
             const outcomeValidate = `${{ steps.validate.outcome }}`;
             const validateOutput = `${{ steps.validate.outputs.stdout }}`;
+            const planOutput = `${{ steps.plan.outputs.plan_output }}`;
             
             const output = `#### Terraform Format and Style 🖌 ${outcomeFmt}`;
             console.log(output);
@@ -71,11 +77,23 @@ jobs:
             </details>
             `;
             console.log(detailsMarkup);
-        
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan
-        working-directory: ${{ env.WORK_DIR}}
+
+            // Log the Terraform Plan result
+            const outputPlan = `#### Terraform Plan 📝 ${outcomePlan}`;
+            console.log(outputPlan);
+  
+            // Display the Plan Output in a collapsible section
+            const planDetailsMarkup = `
+            <details>
+              <summary>Terraform Plan Output</summary>
+              \`\`\`
+              ${process.env.PLAN}
+              \`\`\`
+            </details>
+            `;
+            console.log(planDetailsMarkup);
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
         
       - name: Terraform Apply
         id: apply
