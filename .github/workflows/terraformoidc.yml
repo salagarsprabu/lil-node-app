@@ -28,44 +28,41 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
      
-      - name: Terraform format
+      - name: Terraform Format
         id: fmt
-        run: terraform fmt
-        working-directory: ${{ env.WORK_DIR}}
-        
-      - name: Terraform init
+        run: terraform fmt -check
+
+      - name: Terraform Initialization
         id: init
         run: terraform init
-        working-directory: ${{ env.WORK_DIR}}
-        
+
       - name: Terraform Validate
         id: validate
-        run: terraform validate
-        working-directory: ${{ env.WORK_DIR}}
+        run: |
+          terraform validate > validate_output.txt
+          echo "::set-output name=stdout::$(cat validate_output.txt)"
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan
-        working-directory: ${{ env.WORK_DIR}}
-     
-      - uses: actions/github-script@v6
+        run: terraform plan > plan_output.txt
+
+      - name: Review Terraform Status
+        uses: actions/github-script@v6
         with:
           script: |
             const outcomeFmt = `${{ steps.fmt.outcome || 'unknown' }}`;
             const outcomeInit = `${{ steps.init.outcome || 'unknown' }}`;
             const outcomeValidate = `${{ steps.validate.outcome || 'unknown' }}`;
             const outcomePlan = `${{ steps.plan.outcome || 'unknown' }}`;
-            const validateOutput = `${{ steps.validate.outputs.stdout || 'No output' }}`;
+
+            // Check the actual outputs from the steps
+            const validateOutput = steps.validate.outputs.stdout || 'No output'; 
             
-            const output = `#### Terraform Format and Style 🖌 ${outcomeFmt}`;
-            console.log(output);
-      
-            const initOutput = `#### Terraform Initialization ⚙️ ${outcomeInit}`;
-            console.log(initOutput);
-      
-            const validateStatus = `#### Terraform Validation 🤖 ${outcomeValidate}`;
-            console.log(validateStatus);
-      
+            console.log(`Terraform Format and Style 🖌: ${outcomeFmt}`);
+            console.log(`Terraform Initialization ⚙️: ${outcomeInit}`);
+            console.log(`Terraform Validation 🤖: ${outcomeValidate}`);
+            console.log(`Terraform Plan 📝: ${outcomePlan}`);
+            
             const detailsMarkup = `
             <details>
               <summary>Validation Output</summary>
