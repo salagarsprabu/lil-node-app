@@ -44,8 +44,6 @@ jobs:
         working-directory: ${{ env.WORK_DIR}}
 
       - uses: actions/github-script@v6
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:   
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
