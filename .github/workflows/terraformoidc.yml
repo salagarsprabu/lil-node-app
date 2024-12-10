@@ -48,7 +48,9 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan > plan_output.txt
+        run: |
+          terraform plan > plan_output.txt
+          echo "::set-output name=stdout::$(cat plan_output.txt)"
         working-directory: ${{ env.WORK_DIR}}
 
       - name: Review Terraform Status
