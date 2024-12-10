@@ -29,23 +29,27 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
      
-      - name: Terraform Format
+      - name: Terraform format
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt
+        working-directory: ${{ env.WORK_DIR}}
 
       - name: Terraform Initialization
         id: init
         run: terraform init
+        working-directory: ${{ env.WORK_DIR}}
 
       - name: Terraform Validate
         id: validate
         run: |
           terraform validate > validate_output.txt
           echo "::set-output name=stdout::$(cat validate_output.txt)"
+        working-directory: ${{ env.WORK_DIR}}  
 
       - name: Terraform Plan
         id: plan
         run: terraform plan > plan_output.txt
+        working-directory: ${{ env.WORK_DIR}}
 
       - name: Review Terraform Status
         uses: actions/github-script@v6
