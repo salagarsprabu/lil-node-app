@@ -79,23 +79,7 @@ jobs:
             `;
             console.log(detailsMarkup);
 
-            // Log the Terraform Plan result
-            const outputPlan = `#### Terraform Plan 📝 ${outcomePlan}`;
-            console.log(outputPlan);
-  
-            // Display the Plan Output in a collapsible section
-            const planDetailsMarkup = `
-            <details>
-              <summary>Terraform Plan Output</summary>
-              \`\`\`
-              ${process.env.PLAN}
-              \`\`\`
-            </details>
-            `;
-            console.log(planDetailsMarkup);
-
-
-        
+                  
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
