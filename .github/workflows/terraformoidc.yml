@@ -61,7 +61,7 @@ jobs:
             const outcomePlan = `${{ steps.plan.outcome || 'unknown' }}`;
 
             // Check the actual outputs from the steps
-            const validateOutput = steps.validate.outputs.stdout || 'No output'; 
+            const validateOutput = `${{ steps.validate.outputs.stdout || 'No output' }}`; 
             
             console.log(`Terraform Format and Style 🖌: ${outcomeFmt}`);
             console.log(`Terraform Initialization ⚙️: ${outcomeInit}`);
