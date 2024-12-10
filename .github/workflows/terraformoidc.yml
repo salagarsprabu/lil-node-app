@@ -47,16 +47,15 @@ jobs:
         id: plan
         run: terraform plan
         working-directory: ${{ env.WORK_DIR}}
-
+     
       - uses: actions/github-script@v6
         with:
           script: |
-            const outcomeFmt = `${{ steps.fmt.outcome }}`;
-            const outcomeInit = `${{ steps.init.outcome }}`;
-            const outcomeValidate = `${{ steps.validate.outcome }}`;
-            const outcomePlan = `${{ steps.plan.outcome }}`;
-            const validateOutput = `${{ steps.validate.outputs.stdout }}`;
-            ## const planOutput = `${{ steps.plan.outputs.plan_output }}`;
+            const outcomeFmt = `${{ steps.fmt.outcome || 'unknown' }}`;
+            const outcomeInit = `${{ steps.init.outcome || 'unknown' }}`;
+            const outcomeValidate = `${{ steps.validate.outcome || 'unknown' }}`;
+            const outcomePlan = `${{ steps.plan.outcome || 'unknown' }}`;
+            const validateOutput = `${{ steps.validate.outputs.stdout || 'No output' }}`;
             
             const output = `#### Terraform Format and Style 🖌 ${outcomeFmt}`;
             console.log(output);
@@ -77,7 +76,7 @@ jobs:
             `;
             console.log(detailsMarkup);
 
-                  
+                      
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
