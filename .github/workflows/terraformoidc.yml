@@ -92,7 +92,7 @@ jobs:
             </details>
             `;
             console.log(planDetailsMarkup);
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
         
       - name: Terraform Apply
