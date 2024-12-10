@@ -44,11 +44,22 @@ jobs:
         working-directory: ${{ env.WORK_DIR}}
 
       - uses: actions/github-script@v6
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           script: |
             const outcome = `${{ steps.fmt.outcome }}`;
             const output = `#### Terraform Format and Style 🖌\`${outcome}\``;
             console.log(output);
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
         
       - name: Terraform Plan
         id: plan
