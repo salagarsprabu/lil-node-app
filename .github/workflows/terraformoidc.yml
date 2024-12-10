@@ -92,7 +92,9 @@ jobs:
             </details>
             `;
             console.log(detailsPlanMarkup);
-                      
+            
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            
       - name: Terraform Apply
         id: apply
         run: terraform apply -auto-approve
