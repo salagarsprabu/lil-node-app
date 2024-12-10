@@ -62,6 +62,9 @@ jobs:
 
             // Check the actual outputs from the steps
             const validateOutput = `${{ steps.validate.outputs.stdout || 'No output' }}`; 
+
+             // Check the actual outputs from the steps
+            const planOutput = `${{ steps.plan.outputs.stdout || 'No output' }}`; 
             
             console.log(`Terraform Format and Style 🖌: ${outcomeFmt}`);
             console.log(`Terraform Initialization ⚙️: ${outcomeInit}`);
@@ -78,6 +81,15 @@ jobs:
             `;
             console.log(detailsMarkup);
 
+            const detailsPlanMarkup = `
+            <details>
+              <summary>Plan Output</summary>
+              \`\`\`
+              ${planOutput}
+              \`\`\`
+            </details>
+            `;
+            console.log(detailsPlanMarkup);
                       
       - name: Terraform Apply
         id: apply
